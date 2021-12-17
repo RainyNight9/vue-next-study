@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+
+<script src="demo.js"></script>
+
+<script>
+  import {reactive, effect } from 'Vue'
+  const obj = {
+    name: '前端',
+    num: 1,
+    action: '学呀',
+    emo: '😭'
+  }
+
+  const data = reactive(obj)
+
+  const app = document.getElementById('app')
+
+  const myAction = computed(() => {
+    data.action = ''
+    for (let i = 0; i < data.num; i++) {
+      data.action += `学呀 `
+    }
+    return data.action
+  })
+
+  const myEmo = computed(() => {
+    data.emo = ''
+    for (let i = 0; i < data.num; i++) {
+      data.emo += `😭 `
+    }
+    return data.emo
+  })
+
+  // effect() 定义我们的更新函数
+  effect(() => {
+    console.log(myAction)
+    app.innerHTML = `<h1>${data.name}主流框架现有${data.num}个</h1>
+    <h2>我们就要不停的${myAction.value}!</h2>
+    <h3>${myEmo.value}</h3>`
+  })
+
+  // 修改一下数值
+  const timerId = setInterval(() => {
+    data.num++
+    if (data.num > 8) clearInterval(timerId)
+  }, 5000);
+</script>
+
+</body>
+</html>
